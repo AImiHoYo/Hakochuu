@@ -1,0 +1,309 @@
+/**
+ * Hakochuu 动效专属样式表 (Motion Layer)
+ *
+ * 动效气质总结：慢、轻、柔、雾感、零弹性过冲（No Bounce）。
+ *
+ * 【如何与 hakoniwa-design-tokens.css 一起使用】
+ * 1. 加载顺序：先引入基础设计变量，再引入本动效文件（本文件会增强基础组件类的交互态）：
+ *    <link rel="stylesheet" href="./hakoniwa-design-tokens.css" />
+ *    <link rel="stylesheet" href="./hakoniwa-motion.css" />
+ * 2. 页面切换雾化入场：在页面主容器添加 class="hk-page-enter"（路由离开前切为 hk-page-leave）。
+ * 3. 滚动浮现：给需要入场的区块加 class="hk-reveal"，用 IntersectionObserver 在进入视口时加上 .is-visible。
+ * 4. 所有组件悬停态（导航、新闻行、封面卡片、圆形箭头按钮）引入后自动生效，无需额外 JS。
+ */
+
+:root {
+  /* ==========================================================================
+     1. 动效变量 (Motion Tokens)
+     ========================================================================== */
+  --motion-ease-veil: cubic-bezier(0.25, 0.1, 0.25, 1);       /* 丝绒柔缓：淡入淡出、雾化转场 */
+  --motion-ease-glide: cubic-bezier(0.22, 1, 0.36, 1);        /* 轻盈滑行：位移、下划线、箭头 */
+
+  --motion-duration-hover: 340ms;                              /* 悬停褪色与微交互 */
+  --motion-duration-scrim: 460ms;                              /* 视频蒙版与封面柔化 */
+  --motion-duration-reveal: 760ms;                             /* 区块滚动浮现 */
+  --motion-duration-page: 560ms;                               /* 页面白雾散焦切换 */
+
+  --motion-blur-veil: 10px;                                    /* 页面切换时的散焦半径 */
+  --motion-fade-dim: 0.45;                                     /* 原站标志性的文字/行悬停褪色值 */
+  --motion-cover-dim: 0.82;                                    /* 封面悬停柔化透明度 */
+  --motion-lift-y: 16px;                                       /* 滚动浮现起始位移 */
+}
+
+/* ============================================================================
+   2. 标志性「白雾散焦」页面切换转场 (Blur-Veil Page Transition)
+   对应录屏 00:47-00:49 (NEWS->PROFILE) 与 01:15-01:17 (RELEASE 翻页)
+   ============================================================================ */
+@keyframes hkVeilEnter {
+  0% {
+    opacity: 0;
+    filter: blur(var(--motion-blur-veil));
+    transform: translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes hkVeilLeave {
+  0% {
+    opacity: 1;
+    filter: blur(0);
+  }
+  100% {
+    opacity: 0;
+    filter: blur(var(--motion-blur-veil));
+  }
+}
+
+.hk-page-enter {
+  animation: hkVeilEnter var(--motion-duration-page) var(--motion-ease-veil) both;
+}
+
+.hk-page-leave {
+  animation: hkVeilLeave 320ms var(--motion-ease-veil) both;
+  pointer-events: none;
+}
+
+/* ============================================================================
+   3. 区块滚动轻盈浮现 (Scroll Reveal)
+   配合 IntersectionObserver 进入视口后添加 .is-visible
+   ============================================================================ */
+.hk-reveal {
+  opacity: 0;
+  transform: translateY(var(--motion-lift-y));
+  filter: blur(3px);
+  transition:
+    opacity var(--motion-duration-reveal) var(--motion-ease-veil),
+    transform var(--motion-duration-reveal) var(--motion-ease-glide),
+    filter var(--motion-duration-reveal) var(--motion-ease-veil);
+  will-change: opacity, transform, filter;
+}
+
+.hk-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* 错峰延迟（适合 3 列新闻、封面卡片或工作台参数行依次出现） */
+.hk-reveal--delay-1 { transition-delay: 80ms; }
+.hk-reveal--delay-2 { transition-delay: 160ms; }
+.hk-reveal--delay-3 { transition-delay: 240ms; }
+
+/* ============================================================================
+   4. 顶部导航下划线「从左向右细线划出」增强
+   对应录屏 00:27 / 00:47 / 00:58 / 01:03
+   ============================================================================ */
+.hk-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: var(--color-ink-primary, #3a2e26);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--motion-duration-hover) var(--motion-ease-glide);
+}
+
+.hk-nav a:hover::after,
+.hk-nav a[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+
+/* ============================================================================
+   5. 新闻行 / 分页 / 社交图标「丝绒褪色悬停」(Velvet Dim Hover)
+   对应录屏 00:31-00:35 新闻行悬停时整体柔和变浅
+   ============================================================================ */
+.hk-news-row,
+.hk-pagination a,
+.hk-member-card__socials a,
+.hk-motion-fade {
+  transition: opacity var(--motion-duration-hover) var(--motion-ease-veil);
+}
+
+.hk-news-row:hover,
+.hk-pagination a:hover,
+.hk-member-card__socials a:hover,
+.hk-motion-fade:hover {
+  opacity: var(--motion-fade-dim);
+}
+
+/* ============================================================================
+   6. 视频卡片「暮色渐隐蒙版 + 圆形播放键显现」
+   对应录屏 00:07-00:09 与 00:13-00:17
+   ============================================================================ */
+.hk-video-card {
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-media-card, 0 18px 42px rgba(58, 46, 38, 0.14));
+}
+
+.hk-video-card__scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(58, 46, 38, 0.42) 0%,
+    rgba(58, 46, 38, 0.12) 45%,
+    rgba(58, 46, 38, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity var(--motion-duration-scrim) var(--motion-ease-veil);
+  pointer-events: none;
+}
+
+.hk-video-card__play {
+  position: absolute;
+  left: 1.5rem;
+  bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: var(--radius-full, 9999px);
+  color: #ffffff;
+  opacity: 0;
+  transform: scale(0.92);
+  transition:
+    opacity var(--motion-duration-scrim) var(--motion-ease-veil),
+    transform var(--motion-duration-scrim) var(--motion-ease-glide);
+}
+
+.hk-video-card:hover .hk-video-card__scrim {
+  opacity: 1;
+}
+
+.hk-video-card:hover .hk-video-card__play {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============================================================================
+   7. RELEASE 封面画廊「框内克制微缩放 + 柔化」
+   对应录屏 01:06-01:13 与 01:18-01:21
+   ============================================================================ */
+.hk-release-card__media {
+  overflow: hidden;
+}
+
+.hk-release-card__cover {
+  transition:
+    opacity var(--motion-duration-scrim) var(--motion-ease-veil),
+    transform 640ms var(--motion-ease-glide);
+}
+
+.hk-release-card:hover .hk-release-card__cover {
+  opacity: var(--motion-cover-dim);
+  transform: scale(1.03);
+}
+
+/* ============================================================================
+   8. 极细圆形箭头按钮「轻盈气韵位移」(RELEASE ALL / NEWS ALL / CHRONICLE)
+   对应录屏 00:19-00:21
+   ============================================================================ */
+.hk-cta-link .hk-btn-circle {
+  position: relative;
+  transition:
+    border-color var(--motion-duration-hover) var(--motion-ease-veil),
+    transform var(--motion-duration-hover) var(--motion-ease-glide),
+    background-color var(--motion-duration-hover) var(--motion-ease-veil);
+}
+
+.hk-cta-link:hover .hk-btn-circle {
+  border-color: var(--color-ink-primary, #3a2e26);
+  transform: translateX(4px) scale(1.04);
+}
+
+/* 箭头本体二次微位移（给箭头包一层 .hk-btn-circle__arrow 即可） */
+.hk-btn-circle__arrow {
+  display: inline-block;
+  transition: transform var(--motion-duration-hover) var(--motion-ease-glide);
+}
+
+.hk-cta-link:hover .hk-btn-circle__arrow {
+  transform: translateX(2px);
+}
+
+/* ============================================================================
+   9. 装饰角色 / Avatar 舞台「极轻呼吸漂浮」
+   对应首页右下角 Q 版角色，也适用于你的 Avatar Stage 待机态
+   ============================================================================ */
+@keyframes hkGentleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.hk-motion-float {
+  animation: hkGentleFloat 4.2s ease-in-out infinite;
+}
+
+/* ============================================================================
+   10. CeVIO AI 专题页微动效 (PLAY 按钮双环轻波纹)
+   ============================================================================ */
+@keyframes hkPulseRing {
+  0% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  100% {
+    transform: scale(1.28);
+    opacity: 0;
+  }
+}
+
+[data-theme="cevio"] .hk-btn-play {
+  position: relative;
+}
+
+[data-theme="cevio"] .hk-btn-play::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 1px solid var(--color-border-hairline, #bec6cb);
+  border-radius: var(--radius-full, 9999px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-theme="cevio"] .hk-btn-play:hover::before {
+  animation: hkPulseRing 1.2s var(--motion-ease-glide) infinite;
+}
+
+/* ============================================================================
+   11. 无障碍降级：尊重系统「减少动态效果」设置
+   ============================================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .hk-page-enter,
+  .hk-page-leave,
+  .hk-motion-float,
+  [data-theme="cevio"] .hk-btn-play:hover::before {
+    animation: none !important;
+  }
+
+  .hk-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+  }
+
+  .hk-nav a::after,
+  .hk-news-row,
+  .hk-video-card__scrim,
+  .hk-video-card__play,
+  .hk-release-card__cover,
+  .hk-cta-link .hk-btn-circle {
+    transition-duration: 0.01ms !important;
+  }
+}

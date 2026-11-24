@@ -1,0 +1,51 @@
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# Node / Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/dist/
+.env
+.env.local
+.env.*.local
+
+# Storage, Models & Runtime Assets
+storage/characters/*
+!storage/characters/.gitkeep
+storage/songs/*
+!storage/songs/.gitkeep
+storage/uploads/*
+!storage/uploads/.gitkeep
+cache/*
+!cache/.gitkeep
+*.wav
+*.flac
+*.opus
+*.mp3
+*.pt
+*.pth
+*.safetensors
+*.ckpt
+*.onnx
+*.db
+*.sqlite3
+
+# OS & IDE
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.pid
+*.tsbuildinfo
+.hakochuu_server_history.json
+docs/design/*.png

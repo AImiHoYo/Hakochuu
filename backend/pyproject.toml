@@ -1,0 +1,68 @@
+[project]
+name = "hakochuu-backend"
+version = "0.1.0"
+description = "Hakochuu AI Voice Chat, Singing & Avatar WebUI Backend"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    "sqlalchemy[asyncio]>=2.0.35",
+    "aiosqlite>=0.20.0",
+    "python-multipart>=0.0.12",
+    "httpx>=0.27.2",
+    "redis>=5.2.0",
+    "rq>=2.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.3",
+    "pytest-asyncio>=0.24.0",
+    "ruff>=0.7.0",
+]
+asr = [
+    "funasr>=1.1.0",
+    "modelscope>=1.20.0",
+    "soundfile>=0.12.0",
+]
+tts = [
+    "HyperPyYAML>=1.2.2",
+    "inflect>=7.3.0",
+    "wetext>=0.0.4",
+    "onnxruntime>=1.20.0",
+    "openai-whisper>=20231117",
+    "tiktoken>=0.7.0",
+    "omegaconf>=2.3.0",
+    "conformer>=0.3.2",
+    "einops>=0.7.0",
+    "diffusers>=0.25.0",
+    "lightning>=2.2.0",
+    "gdown>=5.1.0",
+    "matplotlib>=3.7.0",
+    "Unidecode>=1.3.0",
+    "rootutils>=1.0.7",
+    "x-transformers>=1.0.0",
+    "pyarrow>=14.0.0",
+    "pyworld>=0.3.4",
+]
+vc = [
+    "munch>=4.0.0",
+    "pydub>=0.25.1",
+]
+separator = [
+    "audio-separator>=0.40.0",
+    "audioread>=3.0.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]

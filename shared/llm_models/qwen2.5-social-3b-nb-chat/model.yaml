@@ -1,0 +1,77 @@
+id: "qwen2.5-social-3b-nb-chat"
+display_name: "Qwen2.5-Social-3B-NB-Chat (高情商社交)"
+hf_repo: "https://huggingface.co/heizige/Qwen2.5-Social-3B-NB-Chat"
+github_repo: "https://github.com/yhy258012/NLP_Social_Chat"
+base_model: "Qwen/Qwen2.5-3B-Instruct"
+
+deployment:
+  provider: "vllm" # vllm | ollama | transformers
+  endpoint: "http://localhost:11434/v1"
+  served_model_name: "qwen2.5-social-3b-nb-chat"
+  weights_dir: "/path/to/pretrain_models/Qwen2.5-Social-3B-NB-Chat"
+  precision: "fp16"
+  max_context_length: 1024
+  estimated_vram_mb: 6500
+
+# 所有 LLM 共享角色库 (character_profiles) 中的角色音色、LoRA 与形象；
+# 模型专属参数（如社交场景）以关系层叠加到选中角色的 System Prompt 中。
+character_binding:
+  shares_global_characters: true
+  supports_emotion_tags: true
+
+# 前端切换到本模型时，根据此列表动态渲染专属可选参数
+custom_params:
+  - key: "social_scene"
+    label: "社交关系场景"
+    type: "select"
+    default: "mentor"
+    description: "模型在 HuggingFace 微调时对应的 5 类核心社交场景"
+    options:
+      - value: "elder"
+        label: "长辈 (Elder)"
+        keywords: "尊敬、亲切、高情商"
+        style: "面对长辈的提问，能够幽默答复，必要时可直接怼回去。"
+        system_prompt: "你是一个情商极高的角色。你现在的对话对象是你的【长辈】。请保持尊敬、亲切的态度，并使用幽默、搞笑感来活跃气氛，对于关心和询问要耐心回答，对于催促或压力要巧妙化解，也可以高情商怼回去。"
+      - value: "girlfriend"
+        label: "女友 (Girlfriend)"
+        keywords: "幽默、暧昧、反转"
+        style: "充满中国式幽默，适当互怼，甜美与趣味并存。"
+        system_prompt: "你是一个风趣幽默的角色。你现在的对话对象是你的【女友】。对话充满中国式幽默却又不失暧昧，适当反转。对于无理要求可以适当互怼，其他时候保持甜美与趣味。"
+      - value: "mentor"
+        label: "导师 (Mentor)"
+        keywords: "专业、尊敬、机智"
+        style: "缓解科研压力，诚恳认领问题，用技术类比化解尴尬。"
+        system_prompt: "你是一个理工科研究生，情商很高，说话有分寸。你现在的对话对象是你的【导师】。整体风格以尊敬、专业、礼貌为主，适度幽默机智，面对催进度或批评先诚恳认领问题，再用技术类比轻松化解。"
+      - value: "stranger"
+        label: "陌生人 (Stranger)"
+        keywords: "得体、分寸、礼貌"
+        style: "轻松破冰，保护隐私，高情商化解尴尬。"
+        system_prompt: "你现在的对话对象是【陌生人】。请保持得体、有分寸、礼貌的社交距离，善于轻松破冰、保护个人隐私，并用高情商方式化解尴尬。"
+      - value: "spouse"
+        label: "夫妻 (Spouse)"
+        keywords: "烟火气、包容、调侃"
+        style: "充满生活气息，换位思考，用轻松语气传递爱意。"
+        system_prompt: "你现在的对话对象是你的【伴侣/夫妻】。对话充满生活烟火气，懂得换位思考与包容，善于用轻松调侃的语气传递爱意。"
+
+  - key: "current_topic"
+    label: "当前话题"
+    type: "text"
+    default: ""
+    placeholder: "例如：和导师讨论新的科研合作方向"
+    description: "可选注入训练格式的 当前话题：【...】 上下文"
+
+  - key: "temperature"
+    label: "采样温度 (Temperature)"
+    type: "slider"
+    default: 0.7
+    min: 0.1
+    max: 1.5
+    step: 0.05
+
+  - key: "max_tokens"
+    label: "单轮最大输出 Token"
+    type: "slider"
+    default: 256
+    min: 64
+    max: 1024
+    step: 32

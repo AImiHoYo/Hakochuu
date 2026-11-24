@@ -1,0 +1,695 @@
+/**
+ * Hakochuu 全站 CSS 设计变量与标志性组件样式表
+ *
+ * 包含两套可切换主题：
+ * 1. 默认主题 (:root) —— 主站「日系极简画廊 × 古典箱庭花卉风」（TOP / NEWS / PROFILE / RELEASE / CONTACT）
+ * 2. 姐妹主题 ([data-theme="cevio"]) —— CeVIO AI 专题页「冷调极简未来科技 HUD 风」（箱庭ハノ / 箱庭コト）
+ *
+ * 使用方式：
+ * - 主站风格：直接引入本文件即可。
+ * - CeVIO AI 风格：在 <html> 或容器元素上添加 data-theme="cevio"。
+ */
+
+:root {
+  /* ==========================================================================
+     1. 色彩系统 (Color Tokens - 主站默认：暖深棕古典画廊风)
+     ========================================================================== */
+  --color-bg-canvas: #ffffff;
+  --color-surface-input: #f6f4f5;      /* 表单输入框微暖浅灰底色 */
+  --color-surface-hover: #faf8f9;      /* 交互悬停极浅底色 */
+  --color-surface-footer: #3a2e26;     /* 全站实底暖深棕页脚背景 */
+
+  --color-ink-primary: #3a2e26;        /* 暖深棕：主标题、标签底色、正文主墨色（去黑化核心） */
+  --color-ink-secondary: #6b645e;      /* 暖灰棕：导航、日期、次级文字 */
+  --color-ink-muted: #9a9490;          /* 浅暖灰：花括号分类标签、弱化提示 */
+  --color-ink-inverse: #ffffff;        /* 深色标签与页脚内的反白文字 */
+
+  --color-border-hairline: #e5e2e1;    /* 1px 极细圆形箭头按钮描边 */
+  --color-border-dotted: #c9c5c4;      /* 菱形点线分割线与菱形端点色 */
+  --color-border-strong: #3a2e26;      /* 表单提交按钮 1px 细框色 */
+
+  /* 内容驱动的动态环境晕染色（可按当前作品封面主色覆盖） */
+  --color-accent-ambient: rgba(255, 192, 218, 0.30);
+
+  /* ==========================================================================
+     2. 字体与排版 (Typography Tokens)
+     ========================================================================== */
+  --font-serif-display: "Cormorant Garamond", "Shippori Mincho", "Noto Serif JP", "Noto Serif SC", "Hiragino Mincho ProN", Georgia, serif;
+  --font-serif-ui: "EB Garamond", "Shippori Mincho", "Noto Serif SC", Georgia, serif;
+  --font-sans-body: "Noto Sans JP", "Noto Sans SC", "Hiragino Kaku Gothic ProN", "Yu Gothic", -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --text-xs: 0.8125rem;                /* 13px：年份、花括号标签、页脚文字、副标题 */
+  --text-sm: 0.9375rem;                /* 15px：导航项、表单标签、单曲类型、分页数字 */
+  --text-base: 1rem;                   /* 16px：新闻标题、简介正文 */
+  --text-lg: 1.25rem;                  /* 20px：封面主标题、视频标题 */
+  --text-xl: 1.625rem;                 /* 26px：首页板块标题 / PROFILE 组合名 */
+  --text-2xl: 2rem;                    /* 32px：二级页居中大标题 (NEWS / PROFILE / RELEASE / CONTACT) */
+
+  --weight-light: 300;
+  --weight-regular: 400;
+  --weight-medium: 500;
+
+  --tracking-tight: 0.04em;
+  --tracking-meta: 0.08em;             /* 日期、花括号标签、页脚链接 */
+  --tracking-nav: 0.14em;              /* 顶部导航 */
+  --tracking-heading: 0.22em;          /* 大写英文板块标题 */
+
+  --leading-tight: 1.4;
+  --leading-body: 1.85;
+  --leading-editorial: 2.15;           /* PROFILE 简介区块宽行距 */
+
+  /* ==========================================================================
+     3. 间距、容器与网格 (Layout & Spacing Tokens)
+     ========================================================================== */
+  --container-wide: 1200px;            /* 首页与 RELEASE 3 列封面画廊 */
+  --container-profile: 980px;          /* PROFILE 主视觉与简介栏 */
+  --container-members: 780px;          /* PROFILE 双人成员 2 列卡片栏 */
+  --container-narrow: 880px;           /* NEWS 列表与 CONTACT 表单容器 */
+
+  --header-height: 5.5rem;
+  --footer-height: 5rem;
+
+  --space-2xs: 0.25rem;                /* 4px */
+  --space-xs: 0.5rem;                  /* 8px */
+  --space-sm: 1rem;                    /* 16px */
+  --space-md: 1.5rem;                  /* 24px */
+  --space-lg: 2.5rem;                  /* 40px */
+  --space-xl: 4rem;                    /* 64px */
+  --space-section: clamp(4.5rem, 8vw, 7.5rem);
+
+  --grid-gap-news: clamp(1.75rem, 3vw, 2.75rem);
+  --grid-gap-release: clamp(2rem, 4vw, 3.5rem);
+  --grid-gap-members: clamp(2rem, 5vw, 4rem);
+
+  /* ==========================================================================
+     4. 圆角、阴影与动效 (Shape, Elevation & Motion Tokens)
+     ========================================================================== */
+  --radius-none: 0px;                  /* 封面、人物图、输入框、标签、提交按钮保持利落直角 */
+  --radius-subtle: 2px;
+  --radius-full: 9999px;               /* 极细线框圆形按钮 / CeVIO PLAY 按钮 */
+
+  --shadow-media-card: 0 18px 42px rgba(58, 46, 38, 0.14);
+  --shadow-cover-art: 0 14px 32px rgba(58, 46, 38, 0.10);
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 180ms;
+  --duration-base: 300ms;
+  --duration-slow: 520ms;
+}
+
+/* ============================================================================
+   姐妹主题：CeVIO AI 专题页「冷调极简未来科技 HUD 风」
+   用法：<body data-theme="cevio"> 或包裹在独立专题容器上
+   ============================================================================ */
+[data-theme="cevio"] {
+  --color-bg-canvas: #ffffff;
+  --color-surface-footer: #ffffff;     /* 极简白底版权页脚 */
+
+  --color-ink-primary: #222222;        /* 中性冷黑主文字 */
+  --color-ink-secondary: #818181;      /* 冷静中性灰导航 */
+  --color-ink-muted: #99a8b1;          /* 副标语冷青灰（そのウタがツナグのはミライ） */
+
+  --color-border-hairline: #bec6cb;    /* 1px 科技灰 HUD 切角框与网格装饰线 */
+  --color-border-strong: #222222;      /* PLAY 居中圆按钮 1px 细黑描边 */
+
+  /* 双人专属冷调主题色与柔和氛围色 */
+  --color-cevio-hano: #70a9df;         /* 箱庭ハノ：冰川天蓝 */
+  --color-cevio-hano-wash: #cbe7f6;    /* 箱庭ハノ：浅蓝氛围底晕 */
+  --color-cevio-koto: #00ebb4;         /* 箱庭コト：薄荷青绿 */
+  --color-cevio-koto-wash: #94f4d3;    /* 箱庭コト：浅薄荷氛围底晕 */
+}
+
+/* ============================================================================
+   基础画布设置
+   ============================================================================ */
+.hk-page {
+  background-color: var(--color-bg-canvas);
+  color: var(--color-ink-primary);
+  font-family: var(--font-sans-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-regular);
+  line-height: var(--leading-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================================================
+   5. 顶栏与导航组件 (Fixed Header & Minimal Serif Nav)
+   ============================================================================ */
+.hk-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  padding-inline: clamp(1.5rem, 4vw, 3.5rem);
+  background-color: transparent;
+}
+
+/* 可选优化修饰类：避免原站透明固定顶栏滚过文字时发生重叠 */
+.hk-header--frosted {
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.94) 65%, rgba(255, 255, 255, 0));
+  backdrop-filter: blur(4px);
+}
+
+.hk-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  font-family: var(--font-serif-ui);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-nav);
+  color: var(--color-ink-primary);
+}
+
+.hk-nav a {
+  position: relative;
+  color: var(--color-ink-primary);
+  text-decoration: none;
+  padding-bottom: 0.35rem;
+  transition: opacity var(--duration-fast) var(--ease-editorial);
+}
+
+.hk-nav a:not([aria-current="page"]):hover {
+  opacity: 0.58;
+}
+
+.hk-nav a[aria-current="page"] {
+  color: var(--color-ink-primary);
+  opacity: 1;
+}
+
+.hk-nav a[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-color: var(--color-ink-primary);
+}
+
+/* CeVIO 导航中的竖线分隔符 (CONTACT | OFFICIAL SITE) */
+.hk-nav__sep {
+  width: 1px;
+  height: 0.9em;
+  background-color: var(--color-border-hairline);
+}
+
+/* ============================================================================
+   6. 主站标志性装饰与排版组件 (Editorial & Botanical Motifs)
+   ============================================================================ */
+
+/* 6.1 二级页居中对称抬头：♦ TITLE ♦ + 副标题 */
+.hk-page-header {
+  text-align: center;
+  margin-block: var(--space-lg) var(--space-xl);
+}
+
+.hk-page-header__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  font-family: var(--font-serif-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-regular);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-ink-primary);
+}
+
+.hk-page-header__title::before,
+.hk-page-header__title::after {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  background-color: var(--color-ink-primary);
+  transform: rotate(45deg);
+}
+
+.hk-page-header__subtitle {
+  margin-top: var(--space-2xs);
+  font-family: var(--font-serif-ui);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-meta);
+  color: var(--color-ink-secondary);
+}
+
+/* 6.2 菱形点线分割线：♦ ············ ♦ */
+.hk-divider-diamond {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.hk-divider-diamond::before,
+.hk-divider-diamond::after {
+  content: "";
+  flex: 0 0 5px;
+  width: 5px;
+  height: 5px;
+  background-color: var(--color-border-dotted);
+  transform: rotate(45deg);
+}
+
+.hk-divider-diamond__line {
+  flex: 1 1 auto;
+  height: 0;
+  border-top: 1px dotted var(--color-border-dotted);
+}
+
+/* 单端菱形变体（首页新闻日期右侧：2026.11.20 ········ ♦） */
+.hk-divider-diamond--end::before {
+  display: none;
+}
+
+/* 6.3 暖深棕矩形标签（支持破框悬挂在视频/图片卡片左上角） */
+.hk-tag-ribbon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 1rem;
+  background-color: var(--color-ink-primary);
+  color: var(--color-ink-inverse);
+  border-radius: var(--radius-none);
+  font-family: var(--font-serif-ui);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-meta);
+  line-height: 1;
+}
+
+.hk-tag-ribbon--overhang {
+  position: absolute;
+  top: 1.25rem;
+  left: -0.75rem;
+  z-index: 2;
+}
+
+/* 6.4 花括号分类标签：{NEWS}{EVENT}{RELEASE} */
+.hk-tag-brace {
+  font-family: var(--font-serif-ui);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-meta);
+  color: var(--color-ink-muted);
+}
+
+.hk-tag-brace::before {
+  content: "{";
+}
+
+.hk-tag-brace::after {
+  content: "}";
+}
+
+/* 6.5 极细线框圆形箭头按钮 (RELEASE ALL / NEWS ALL / 外链) */
+.hk-cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--color-ink-primary);
+  text-decoration: none;
+  font-family: var(--font-serif-ui);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-nav);
+}
+
+.hk-btn-circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border: 1px solid var(--color-border-hairline);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-canvas);
+  color: var(--color-ink-primary);
+  transition:
+    border-color var(--duration-base) var(--ease-editorial),
+    transform var(--duration-base) var(--ease-editorial);
+}
+
+.hk-cta-link:hover .hk-btn-circle {
+  border-color: var(--color-ink-primary);
+  transform: translateX(3px);
+}
+
+/* 6.6 内容驱动的高斯模糊氛围背景层（首页 RELEASE 区块） */
+.hk-ambient-section {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-section);
+}
+
+.hk-ambient-section::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 42%;
+  background: radial-gradient(circle at 60% 45%, var(--color-accent-ambient), transparent 72%);
+  filter: blur(48px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ============================================================================
+   7. 页面核心模块 (PROFILE / RELEASE / NEWS / CONTACT / FOOTER)
+   ============================================================================ */
+
+/* 7.1 PROFILE 宽行距简介块与双人成员 2 列卡片 */
+.hk-profile-bio {
+  max-width: var(--container-profile);
+  margin-inline: auto;
+  line-height: var(--leading-editorial);
+  color: var(--color-ink-primary);
+}
+
+.hk-profile-bio__name {
+  text-align: center;
+  margin-bottom: var(--space-lg);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-light);
+  letter-spacing: var(--tracking-nav);
+}
+
+.hk-member-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--grid-gap-members);
+  max-width: var(--container-members);
+  margin: var(--space-xl) auto 0;
+}
+
+.hk-member-card__avatar {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hk-member-card__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: var(--space-sm);
+}
+
+.hk-member-card__name {
+  font-family: var(--font-serif-ui);
+  font-size: var(--text-base);
+  letter-spacing: var(--tracking-meta);
+  color: var(--color-ink-primary);
+}
+
+.hk-member-card__socials {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-ink-primary);
+}
+
+/* 7.2 RELEASE 3 列纯平正方形封面画廊 */
+.hk-release-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--grid-gap-release);
+  max-width: var(--container-wide);
+  margin-inline: auto;
+}
+
+.hk-release-card {
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.hk-release-card__cover {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity var(--duration-base) var(--ease-editorial),
+              transform var(--duration-slow) var(--ease-editorial);
+}
+
+/* 首页主打封面可加柔和投影，列表页保持纯平无框 */
+.hk-release-card__cover--elevated {
+  box-shadow: var(--shadow-cover-art);
+}
+
+.hk-release-card:hover .hk-release-card__cover {
+  opacity: 0.88;
+  transform: translateY(-3px);
+}
+
+.hk-release-card__type {
+  margin-top: var(--space-sm);
+  font-size: var(--text-xs);
+  color: var(--color-ink-secondary);
+}
+
+.hk-release-card__title {
+  margin-top: var(--space-2xs);
+  font-size: var(--text-base);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* 7.3 NEWS 三列条纹行与极简纯衬线数字分页器 */
+.hk-news-row {
+  display: grid;
+  grid-template-columns: 5.5rem 1fr auto;
+  align-items: center;
+  gap: var(--space-md);
+  padding-block: var(--space-md);
+  text-decoration: none;
+  color: inherit;
+  transition: opacity var(--duration-fast) var(--ease-editorial);
+}
+
+.hk-news-row:hover {
+  opacity: 0.65;
+}
+
+.hk-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-block: var(--space-xl);
+  font-family: var(--font-serif-ui);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-meta);
+  color: var(--color-ink-secondary);
+}
+
+.hk-pagination a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-editorial);
+}
+
+.hk-pagination a:hover,
+.hk-pagination a[aria-current="page"] {
+  color: var(--color-ink-primary);
+  font-weight: var(--weight-medium);
+}
+
+/* 7.4 CONTACT 无框微暖浅灰表单与细框提交按钮 */
+.hk-input,
+.hk-select,
+.hk-textarea {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-none);
+  background-color: var(--color-surface-input);
+  color: var(--color-ink-primary);
+  font-family: var(--font-sans-body);
+  font-size: var(--text-sm);
+  transition: border-color var(--duration-fast) var(--ease-editorial),
+              background-color var(--duration-fast) var(--ease-editorial);
+}
+
+.hk-input:focus,
+.hk-select:focus,
+.hk-textarea:focus {
+  outline: none;
+  border-color: var(--color-border-dotted);
+  background-color: var(--color-bg-canvas);
+}
+
+.hk-btn-submit {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14rem;
+  padding: 0.9rem 2rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-none);
+  background-color: var(--color-bg-canvas);
+  color: var(--color-ink-primary);
+  font-family: var(--font-sans-body);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-meta);
+  cursor: pointer;
+  transition:
+    background-color var(--duration-base) var(--ease-editorial),
+    color var(--duration-base) var(--ease-editorial);
+}
+
+.hk-btn-submit::after {
+  content: "→";
+  position: absolute;
+  right: 1.25rem;
+  transition: transform var(--duration-base) var(--ease-editorial);
+}
+
+.hk-btn-submit:hover {
+  background-color: var(--color-ink-primary);
+  color: var(--color-ink-inverse);
+}
+
+.hk-btn-submit:hover::after {
+  transform: translateX(3px);
+}
+
+/* 7.5 全站实底暖深棕页脚 (Footer) */
+.hk-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  min-height: var(--footer-height);
+  padding: var(--space-sm) clamp(1.5rem, 4vw, 3.5rem);
+  background-color: var(--color-surface-footer);
+  color: var(--color-ink-inverse);
+  font-family: var(--font-serif-ui);
+  font-size: var(--text-xs);
+  letter-spacing: var(--tracking-meta);
+}
+
+.hk-footer__groups {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.hk-footer__group {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hk-footer a {
+  color: inherit;
+  text-decoration: none;
+  opacity: 0.88;
+  transition: opacity var(--duration-fast) var(--ease-editorial);
+}
+
+.hk-footer a:hover {
+  opacity: 1;
+}
+
+/* ============================================================================
+   8. CeVIO AI 专题页专属组件 (Futuristic Cyber-Minimalist HUD)
+   ============================================================================ */
+
+/* 8.1 45° 切角科技感人物外框 */
+.hk-hud-frame {
+  position: relative;
+  border: 1px solid var(--color-border-hairline);
+  clip-path: polygon(
+    18px 0, calc(100% - 18px) 0,
+    100% 18px, 100% calc(100% - 18px),
+    calc(100% - 18px) 100%, 18px 100%,
+    0 calc(100% - 18px), 0 18px
+  );
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), var(--color-cevio-hano-wash, #cbe7f6));
+}
+
+.hk-hud-frame--koto {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.4), var(--color-cevio-koto-wash, #94f4d3));
+}
+
+/* 8.2 轻量科技点阵装饰块 */
+.hk-hud-dots {
+  width: 4.5rem;
+  height: 1.75rem;
+  background-image: radial-gradient(circle, var(--color-border-hairline) 1.25px, transparent 1.25px);
+  background-size: 10px 10px;
+}
+
+/* 8.3 居中极简细框 PLAY 圆形按钮 */
+.hk-btn-play {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 6rem;
+  height: 6rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-full);
+  background-color: var(--color-bg-canvas);
+  color: var(--color-ink-primary);
+  font-family: var(--font-serif-display);
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-nav);
+  cursor: pointer;
+  transition:
+    transform var(--duration-base) var(--ease-editorial),
+    background-color var(--duration-base) var(--ease-editorial),
+    color var(--duration-base) var(--ease-editorial);
+}
+
+.hk-btn-play:hover {
+  transform: scale(1.06);
+  background-color: var(--color-ink-primary);
+  color: var(--color-ink-inverse);
+}
+
+/* 8.4 柔和冷色虹彩点缀标题（如 ABOUT） */
+.hk-text-iridescent {
+  font-family: var(--font-serif-display);
+  font-size: var(--text-xl);
+  letter-spacing: var(--tracking-heading);
+  background: linear-gradient(
+    90deg,
+    var(--color-ink-primary) 0%,
+    var(--color-cevio-koto, #00ebb4) 35%,
+    var(--color-ink-primary) 65%,
+    var(--color-cevio-hano, #70a9df) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ============================================================================
+   响应式断点
+   ============================================================================ */
+@media (max-width: 768px) {
+  .hk-release-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .hk-member-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hk-news-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-xs);
+  }
+
+  .hk-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "protocol_version": "1.0",
+  "header_bytes": 16,
+  "endianness": "big",
+  "struct_format": ">BBHIII",
+  "flags": {
+    "NONE": 0,
+    "EOS": 1,
+    "KEYFRAME": 2
+  },
+  "frame_types": {
+    "USER_AUDIO_UP": 1,
+    "TTS_AUDIO_DOWN": 2,
+    "VC_VOCAL_DOWN": 3,
+    "AVATAR_VISEME_DOWN": 4
+  },
+  "codecs": {
+    "PCM16_16K": 1,
+    "PCM16_24K": 2,
+    "OPUS_24K": 3,
+    "OPUS_48K": 4,
+    "VISEME_MSGPACK": 5
+  },
+  "signaling_types": [
+    "HELLO",
+    "HELLO_ACK",
+    "INTERRUPT",
+    "EMOTION_TAG",
+    "SING_START",
+    "SING_STOP",
+    "ERROR"
+  ]
+}
